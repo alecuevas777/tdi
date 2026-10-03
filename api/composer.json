@@ -1,0 +1,11 @@
+{
+  "name": "911/contact-api",
+  "description": "API de cotización para 911 CAR WASH & HOME (PHPMailer + SMTP)",
+  "require": {
+    "php": ">=8.1",
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}

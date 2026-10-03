@@ -1,0 +1,31 @@
+# TDI — Contact API (Apache / Hostinger)
+
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_authz_core.c>
+  # Bloquear archivos sensibles
+  <FilesMatch "(?i)^(\.env.*|config\.php|config\.example\.php|composer\.(json|lock)|\.gitignore|README\.md)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Forzar HTTPS (Hostinger / proxy)
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Bloquear acceso directo a lib/, vendor/ y .env
+  RewriteRule ^(lib|vendor)(/|$) - [F,L]
+  RewriteRule ^\.env - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>

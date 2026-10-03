@@ -1,0 +1,8 @@
+# Secretos y configuración de la API. No subir al repositorio.
+.env
+.env.*
+!.env.example
+api/.env
+api/.env.*
+!api/.env.example
+api/config.php

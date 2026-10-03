@@ -1,0 +1,50 @@
+Options -Indexes -MultiViews
+ServerSignature Off
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js
+  AddType image/jpeg .jpg .jpeg
+  AddType image/png .png
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddCharset UTF-8 .css .js .html
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # CSS, JS e imágenes: servir el archivo, no reescribir
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule \.(css|js|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|xml|txt|map)$ - [L]
+
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.tdigestion\.cl$ [NC]
+  RewriteRule ^ https://tdigestion.cl%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(png|jpe?g|gif|webp|svg|ico|woff2?)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
