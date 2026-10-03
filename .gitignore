@@ -6,3 +6,8 @@ api/.env
 api/.env.*
 !api/.env.example
 api/config.php
+
+# Sitemap y reglas del servidor
+sitemap.xml
+.htaccess
+api/.htaccess
